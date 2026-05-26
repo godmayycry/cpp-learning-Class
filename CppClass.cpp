@@ -2,6 +2,7 @@
 
 using namespace std;
 
+class Building;
 class Car;
 class Person {
 private:
@@ -9,15 +10,14 @@ private:
 	string name_person, job_person;
 public:
 
-	Person(int a, string n, string j) {
-		set_data_person(a, n, j);
+	friend void info_building_person(Person& person, Building& buildin);
+
+	Person(int age_person, string name_person, string job_person) {
+		this->age_person = age_person;
+		this->name_person = name_person;
+		this->job_person = job_person;
 	}
 
-	void set_data_person(int a, string n, string j) {
-		age_person = a;
-		name_person = n;
-		job_person = j;
-	}
 	friend void info_car_person(Car& car, Person& person);
 
 	void get_info_person() {
@@ -31,17 +31,14 @@ private:
 	int year_car;
 	string name_car, color_car;
 public:
-	Car(int y, string n, string c) {
-		set_data_car(y, n, c);
+	Car(int year_car, string name_car, string color_car) {
+		this->year_car = year_car;
+		this->name_car = name_car;
+		this->color_car = color_car;
 	}
 
 	friend void info_car_person(Car& car, Person& person);
 
-	void set_data_car(int y, string n, string c) {
-		year_car = y;
-		name_car = n;
-		color_car = c;
-	}
 	void get_info_car() {
 		cout << "Car: " << "Years: " << year_car << ". Name: " << name_car << ". Color: " << color_car << '.' << endl;
 	}
@@ -55,15 +52,13 @@ private:
 
 public:
 
-	Building(int y, string t, float hp, string c) {
-		set_data_building(y, t, hp, c);
-	}
+	friend void info_building_person(Person& person, Building& buildin);
 
-	void set_data_building(int y, string n, float hp, string c) {
-		year_building = y;
-		name_building = n;
-		color_building = c;
-		HP_procent_building = hp;
+	Building(int year_building, string name_building, float HP_procent_building, string color_building) {
+		this->year_building = year_building;
+		this->name_building = name_building;
+		this->HP_procent_building = HP_procent_building;
+		this->color_building = color_building;
 	}
 
 	void get_info_building() {
@@ -72,8 +67,39 @@ public:
 };
 
 void info_car_person(Car& car, Person& person) {
-	cout << "Person: " << person.name_person << " has a car " << car.name_car << endl;
+	cout << "Person " << person.name_person << " has a car " << car.name_car << endl;
 }
+
+void info_building_person(Person& person, Building& building) {
+	cout << "Person " << person.name_person << " has a build " << building.name_building << endl;
+}
+
+class PC {
+private:
+	string os;
+	float HP_procent_PC;
+public:
+	PC(float HP_procent_PC, string os) {
+		this->HP_procent_PC = HP_procent_PC;
+		this->os = os;
+	}
+	void get_info_PC() {
+		cout << "Computer: " << "OS: " << os << ". HP: " << HP_procent_PC << '%';
+	}
+};
+
+class Laptop : public PC {
+private:
+	float weight;
+public:
+	Laptop(float HP_procent_PC, string os, float weight): PC(HP_procent_PC, os) {
+		this->weight = weight;
+	}
+	void get_info_PC() {
+		PC::get_info_PC();
+		cout << ". Weight: " << weight;
+	}
+};
 
 int main() {
 
@@ -84,6 +110,14 @@ int main() {
 	bmw.get_info_car();
 
 	info_car_person(bmw, john);
+
+	Building house(2000, "House", 88.8f, "Ruby");
+	house.get_info_building();
+
+	info_building_person(john, house);
+
+	Laptop mac(98.2f, "mac", 2.8f);
+	mac.get_info_PC();
 
 	return 0;
 }
